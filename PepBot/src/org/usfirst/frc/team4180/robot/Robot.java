@@ -1,6 +1,8 @@
 
 package org.usfirst.frc.team4180.robot;
 
+import listeners.Attack3Joystick;
+import listeners.MovementListener;
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 /**
@@ -11,12 +13,24 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * directory.
  */
 public class Robot extends IterativeRobot {
+	private MovementListener movementListener;
+	private Attack3Joystick joystick1;
+	private DriveTrain driveTrain;
+	
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
+    	movementListener = new MovementListener(driveTrain);
+    	joystick1 = new Attack3Joystick(1);
+    	driveTrain = new DriveTrain();
+    	joystick1.addJoystickListener(movementListener);
 
+    }
+    
+    public void teleopInit(){
+    	
     }
 
     /**
@@ -30,8 +44,9 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        
+        joystick1.listen();
     }
+    
     
     /**
      * This function is called periodically during test mode
