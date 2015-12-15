@@ -2,8 +2,10 @@
 package org.usfirst.frc.team4180.robot;
 
 import listeners.Attack3Joystick;
+import listeners.ButtonControls;
 import listeners.MovementListener;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Relay.Value;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -14,19 +16,26 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  */
 public class Robot extends IterativeRobot {
 	private MovementListener movementListener;
+	private ButtonControls buttonControls;
 	private Attack3Joystick joystick1;
 	private DriveTrain driveTrain;
+	private Pneumatics pneumatics;
+	private Compressor compressor;
 	
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-    	movementListener = new MovementListener(driveTrain);
-    	joystick1 = new Attack3Joystick(1);
     	driveTrain = new DriveTrain();
+    	movementListener = new MovementListener(driveTrain);
+    	pneumatics = new Pneumatics();
+    	buttonControls = new ButtonControls(pneumatics);
+    	joystick1 = new Attack3Joystick(0);
     	joystick1.addJoystickListener(movementListener);
-
+    	joystick1.addButtonListener(joystick1.BUTTONS, buttonControls);
+    	/*compressor = new Compressor();
+    	compressor.Compressing.set(Value.kForward);*/
     }
     
     public void teleopInit(){
@@ -37,7 +46,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-
+    	//compressor.listen();
     }
 
     /**
@@ -45,6 +54,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         joystick1.listen();
+        //compressor.listen();
     }
     
     
